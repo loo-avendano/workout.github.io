@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trabajo</title>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            background-color: #e0e0e0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            position: relative;
+            overflow: hidden; /* Evita barras de desplazamiento */
+        }
+        .button {
+            background-color: #007bff; /* Color azul */
+            border: none;
+            color: white;
+            padding: 15px 30px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 20px;
+            cursor: pointer;
+            border-radius: 5px;
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+        }
+        #countdown {
+            font-size: 100px; /* Tamaño de fuente grande para mejor visibilidad */
+            font-weight: bold; /* Negrita para mayor claridad */
+            color: #333; /* Color de texto oscuro para buen contraste */
+            background-color: rgba(255, 255, 255, 0.8); /* Fondo blanco semi-transparente */
+            padding: 20px;
+            border-radius: 10px;
+            position: absolute;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div id="countdown">5</div>
+    <a href="inicio.html" class="button" id="returnButton">REGRESAR</a>
+
+    <script>
+        let countdownInterval;
+        let countdownRunning = true;
+
+        // Función para cambiar el color de fondo a un color aleatorio
+        function changeBackgroundColor() {
+            const colors = ['#ff0000', '#00ff00', '#800080']; // Rojo, Verde, Morado
+            const randomColor = colors[Math.floor(Math.random() * colors.length)];
+            document.body.style.backgroundColor = randomColor;
+            
+            setTimeout(() => {
+                if (countdownRunning) {
+                    document.body.style.backgroundColor = '#e0e0e0'; // Volver al color original
+                }
+            }, 2000); // 2 segundos
+        }
+
+        // Función de cuenta regresiva
+        function startCountdown() {
+            let timeLeft = 5;
+            const countdownElement = document.getElementById('countdown');
+            
+            countdownInterval = setInterval(() => {
+                countdownElement.textContent = timeLeft;
+                timeLeft -= 1;
+                
+                if (timeLeft < 0) {
+                    clearInterval(countdownInterval);
+                    changeBackgroundColor();
+                    // Reiniciar la cuenta regresiva después del cambio de color
+                    setTimeout(startCountdown, 2000); // Esperar 2 segundos antes de reiniciar
+                }
+            }, 1000); // Actualizar cada segundo
+        }
+
+        // Iniciar la cuenta regresiva cuando la página cargue
+        window.onload = startCountdown;
+
+        // Función para detener la cuenta regresiva y redirigir cuando se presiona el botón "REGRESAR"
+        document.getElementById('returnButton').addEventListener('click', (event) => {
+            event.preventDefault(); // Evitar el comportamiento por defecto del enlace
+            countdownRunning = false;
+            clearInterval(countdownInterval);
+            document.body.style.backgroundColor = '#e0e0e0'; // Asegurarse de que el color de fondo vuelva al original
+            setTimeout(() => {
+                window.location.href = 'inicio.html'; // Redirigir a la página de inicio
+            }, 100); // Esperar un breve momento para asegurar que el color de fondo se restablezca
+        });
+    </script>
+</body>
+</html>
